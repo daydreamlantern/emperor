@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Import your images directly
@@ -12,6 +12,7 @@ import mailIcon from './assets/mail.png';
 import facebookIcon from './assets/facebook.png';
 import instagramIcon from './assets/instagram.png';
 import downbg from './assets/downbg.png';
+import logo from './assets/emlogo.png'; // Import your logo image
 
 // Import service images
 import haircutImg from './assets/Haircut.png';
@@ -27,7 +28,7 @@ const Homepage = () => {
         if (targetElement) {
             window.scrollTo({
                 top: targetElement.offsetTop,
-                behavior: 'smooth'
+                behavior: 'smooth',
             });
         }
     };
@@ -43,38 +44,60 @@ const Homepage = () => {
     );
 };
 
-const Header = ({ onNavClick }) => (
-    <header
-        id="home"
-        className="section header"
-        style={{
-            backgroundImage: `url(${background1})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '20px',
-            position: 'relative',
-            minHeight: '100vh',
-            color: 'white',
-            textAlign: 'center'
-        }}
-    >
-        <nav className="nav">
-            <Link to="/" className="nav-link">HOME</Link>
-            <Link to="/about" className="nav-link">ABOUT US</Link>
-            <Link to="/services" className="nav-link">SERVICES</Link>
-        </nav>
-        <Link to="/book">
-            <button className="book">BOOK APPOINTMENT</button>
-        </Link> 
-    </header>
-);
+const Header = ({ onNavClick }) => {
+    const [isSticky, setIsSticky] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+            setIsSticky(scrollY > 100); // Adjust this value as needed
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    return (
+        <header
+            id="home"
+            className={`section header ${isSticky ? 'sticky-nav' : ''}`}
+            style={{
+                backgroundImage: `url(${background1})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '20px',
+                position: 'relative',
+                minHeight: '100vh',
+                color: 'white',
+                textAlign: 'center',
+            }}
+        >
+            <Link to="/" style={{ marginRight: '1700px', marginTop: '25px' }}>
+                <img src={logo} alt="Logo" style={{ width: '55px', height: 'auto' }} />
+            </Link>
+            <nav className="nav">
+                <Link to="/" className="nav-link">HOME</Link>
+                <Link to="/about" className="nav-link">ABOUT US</Link>
+                <Link to="/services" className="nav-link">SERVICES</Link>
+            </nav>
+            <Link to="/services-barber">
+                <button className="create-button">BOOK APPOINTMENT</button>
+            </Link>
+        </header>
+    );
+};
 
 const Services = () => (
     <section id="services" className="section services">
-        <h2>Emperor <span className="highlight">Signature</span> Haircut</h2>
+        <h2 className="services-title">
+            Emperor <span className="highlight">Signature</span> Haircut
+        </h2>
         <div className="service-list">
             {serviceData.map((service, index) => (
                 <Service key={index} service={service} />
@@ -114,21 +137,31 @@ const Team = () => (
             position: 'relative',
             minHeight: '100vh',
             color: 'white',
-            textAlign: 'center'
+            textAlign: 'center',
         }}
     >
         <div className="profile-container">
-            <div className="profile-circle">
-                <img src={barber1} alt="Barber 1" />
+            <div className="profile">
+                <div className="profile-circle">
+                    <img src={barber1} alt="Barber 1" />
+                </div>
+                <h5>Barber Name</h5>
             </div>
-            <div className="profile-circle">
-                <img src={barber2} alt="Barber 2" />
+
+            <div className="profile">
+                <div className="profile-circle">
+                    <img src={barber2} alt="Barber 2" />
+                </div>
+                <h5>Barber Name</h5>
             </div>
-            <div className="profile-circle">
-                <img src={barber3} alt="Barber 3" />
+
+            <div className="profile">
+                <div className="profile-circle">
+                    <img src={barber3} alt="Barber 3" />
+                </div>
+                <h5>Barber Name</h5>
             </div>
         </div>
-        <button className="see-all-barbers">See All Barbers</button>
     </section>
 );
 
@@ -147,8 +180,8 @@ const About = () => (
             padding: '20px',
             position: 'relative',
             minHeight: '100vh',
-            color: 'white',
-            textAlign: 'left'
+            color: '#333',
+            textAlign: 'left',
         }}
     >
         <div className="about-container">
@@ -183,7 +216,7 @@ const About = () => (
 
 const Footer = () => (
     <footer className="footer">
-        <p>&copy; 2024 Emperors Lounge & Barbershop. All rights reserved.</p>
+        <p>© 2024 Emperors Lounge & Barbershop. All rights reserved.</p>
     </footer>
 );
 
